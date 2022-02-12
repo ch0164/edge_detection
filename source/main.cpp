@@ -4,6 +4,7 @@
 #include "edge_detection.h"
 
 int main(void) {
+    auto start = std::chrono::system_clock::now();
 	/* Allocate memory to hold input/output images. */
 	int **input_image = new int*[IMAGE_HEIGHT];
 	int **output_image = new int*[IMAGE_HEIGHT - 2];
@@ -61,6 +62,10 @@ int main(void) {
 	}
 	delete[] input_image;
 	delete[] output_image;
+
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "Finished in " << elapsed_seconds.count();
 
     return 0;
 }

@@ -5,7 +5,9 @@
 /* C Includes */
 
 /* C++ Includes */
+#include <chrono>
 #include <cmath>
+#include <ctime>
 #include <fstream>
 #include <iostream>
 #include <string>
