@@ -36,32 +36,34 @@ static const int IMAGE_HEIGHT = 512;
 static const int PIXEL_COUNT = IMAGE_WIDTH * IMAGE_HEIGHT;
 
 /* Sobel Operator */
-static const int SOBEL_V[3][3] = {{-1, 0, 1},
-								  {-2, 0, 2},
-								  {-1, 0, 1 }};
-static const int SOBEL_H[3][3] = {{-1, -2, -1},
-								  {0, 0, 0},
-								  {1, 2, 1}};
+static const int SOBEL_V[3][3] = {{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1 }};
+static const int SOBEL_H[3][3] = {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}};
 
 /* Roberts Cross Operators */
-static const int ROBERTS_V[2][2] = {{1, 0},
-									{0, -1}};
-static const int ROBERTS_H[2][2] = {{0, 1},
-									{-1, 0}};
+static const int ROBERTS_V[2][2] = {{1, 0}, {0, -1}};
+static const int ROBERTS_H[2][2] = {{0, 1}, {-1, 0}};
+
+/* Blur Operators */
+static const int MEAN_BLUR[3][3] = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+static const int GAUSSIAN_BLUR[3][3] = {{1, 2, 1}, {2, 4, 2}, {1, 2, 1}};
 
 /* Helper Functions */
-int sobel(const bool, const int, const int, int **);
-int roberts(const bool, const int, const int, int **);
-void write_pgm(const std::string&, int **);
+int convolve_order_2(const int[2][2], const int, const int, int **);
+int convolve_order_3(const int[3][3], const int, const int, int **);
+void write_pgm(const std::string&, const std::string&, int **);
 
+/* Execution Timer Class */
 class Timer {
 private:
     std::chrono::time_point<std::chrono::system_clock> start;
 	std::string label;
 public:
-    Timer(const std::string& l) : start(std::chrono::system_clock::now()), label(l) {}
+    Timer(const std::string& l) : 
+		start(std::chrono::system_clock::now()), label(l) {}
     ~Timer() {
-        std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - start;
-        std::cout << label << " execution time: " << elapsed_seconds.count() << " s" << std::endl;
+        std::chrono::duration<double> elapsed_seconds = 
+			std::chrono::system_clock::now() - start;
+        std::cout << label << " execution time: ";
+		std::cout << elapsed_seconds.count() << " s" << std::endl;
     }
 };
