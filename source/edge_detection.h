@@ -55,3 +55,15 @@ static const int ROBERTS_H[2][2] = {{0, 1},
 int sobel(const bool, const int, const int, int **);
 int roberts(const bool, const int, const int, int **);
 void write_pgm(const std::string&, int **);
+
+class Timer {
+    private:
+    std::chrono::time_point<std::chrono::system_clock> start;
+	std::string label;
+    public:
+    Timer(const std::string& l) : start(std::chrono::system_clock::now()), label(l) {}
+    ~Timer() {
+        std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - start;
+        std::cout << label << " execution time: " << elapsed_seconds.count() << " s" << std::endl;
+    }
+};

@@ -3,8 +3,9 @@
 */
 #include "edge_detection.h"
 
-int main(void) {
-    auto start = std::chrono::system_clock::now();
+int main(void) {  // Start Total Timer
+    Timer total_time("Total");
+
 	/* Allocate memory to hold input/output images. */
 	int **input_image = new int*[IMAGE_HEIGHT];
 	int **output_image = new int*[IMAGE_HEIGHT - 2];
@@ -28,6 +29,9 @@ int main(void) {
 			}
 		}
 		
+        {  // Start Timer
+        Timer sobel_time(image_label + "_sobel");
+
 		/* Detect image's edges using the Sobel operator. */
 		for (int i = 1; i < IMAGE_HEIGHT - 1; i++) {
 			for (int j = 1; j < IMAGE_WIDTH - 1; j++) {
@@ -39,8 +43,12 @@ int main(void) {
 
 		/* Generate PGM file for Sobel output. */
 		write_pgm(image_label + "_sobel", output_image);
-
-		/* Detect image's edges using the Roberts cross. */
+        }  // End Sobel Timer
+        
+        {  // Start Roberts Timer
+        Timer roberts_time(image_label + "_roberts");
+		
+        /* Detect image's edges using the Roberts cross. */
 		for (int i = 1; i < IMAGE_HEIGHT - 1; i++) {
 			for (int j = 1; j < IMAGE_WIDTH - 1; j++) {
 				int V = roberts(true, i, j, input_image);
@@ -51,6 +59,7 @@ int main(void) {
 
 		/* Generate PGM file for Roberts output. */
 		write_pgm(image_label + "_roberts", output_image);
+        }  // End Roberts Timer
 	}
 
     /* Clean up allocated memory. */
@@ -63,12 +72,8 @@ int main(void) {
 	delete[] input_image;
 	delete[] output_image;
 
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "Finished in " << elapsed_seconds.count();
-
     return 0;
-}
+}  // End Total Timer
 
 int sobel(const bool vertical, const int i, const int j, int **I) {
 	if (vertical) {
