@@ -2,8 +2,6 @@
     File: edge_detection.h
 */
 
-/* C Includes */
-
 /* C++ Includes */
 #include <chrono>
 #include <cmath>
@@ -57,10 +55,10 @@ int roberts(const bool, const int, const int, int **);
 void write_pgm(const std::string&, int **);
 
 class Timer {
-    private:
+private:
     std::chrono::time_point<std::chrono::system_clock> start;
 	std::string label;
-    public:
+public:
     Timer(const std::string& l) : start(std::chrono::system_clock::now()), label(l) {}
     ~Timer() {
         std::chrono::duration<double> elapsed_seconds = std::chrono::system_clock::now() - start;
