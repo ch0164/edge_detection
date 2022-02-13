@@ -67,7 +67,8 @@ int main(void) {  // Start Total Timer
 				if (i == 0 || i == IMAGE_HEIGHT - 1 ||  j == 0 || j == IMAGE_WIDTH - 1) {
 					blurred_image[i][j] = 0;
 				} else {
-					blurred_image[i][j] = convolve_order_3(MEAN_BLUR, i, j, input_image);
+					blurred_image[i][j] = static_cast<int>(
+						round(convolve_order_3(MEAN_BLUR, i, j, input_image) / 9));
 				}
 			}
 		}
@@ -89,10 +90,12 @@ int main(void) {  // Start Total Timer
 				if (i == 0 || i == IMAGE_HEIGHT - 1 || j == 0 || j == IMAGE_WIDTH - 1) {
 					blurred_image[i][j] = 0;
 				} else {
-					blurred_image[i][j] = convolve_order_3(MEAN_BLUR, i, j, input_image);
+					blurred_image[i][j] = static_cast<int>(
+						round(convolve_order_3(MEAN_BLUR, i, j, input_image) / 9));
 				}
 			}
 		}
+		write_pgm(image_label, image_label + "_mean_blur", blurred_image);
 		for (int i = 1; i < IMAGE_HEIGHT - 1; i++) {
 			for (int j = 1; j < IMAGE_WIDTH - 1; j++) {
 				int V = convolve_order_2(ROBERTS_V, i, j, blurred_image);
@@ -111,7 +114,8 @@ int main(void) {  // Start Total Timer
 				if (i == 0 || i == IMAGE_HEIGHT - 1 || j == 0 || j == IMAGE_WIDTH - 1) {
 					blurred_image[i][j] = 0;
 				} else {
-					blurred_image[i][j] = convolve_order_3(GAUSSIAN_BLUR, i, j, input_image);
+					blurred_image[i][j] = static_cast<int>(
+						round(convolve_order_3(GAUSSIAN_BLUR, i, j, input_image) / 16));
 				}
 			}
 		}
@@ -133,10 +137,12 @@ int main(void) {  // Start Total Timer
 				if (i == 0 || i == IMAGE_HEIGHT - 1 || j == 0 || j == IMAGE_WIDTH - 1) {
 					blurred_image[i][j] = 0;
 				} else {
-					blurred_image[i][j] = convolve_order_3(GAUSSIAN_BLUR, i, j, input_image);
+					blurred_image[i][j] = static_cast<int>(
+						round(convolve_order_3(GAUSSIAN_BLUR, i, j, input_image) / 16));
 				}
 			}
 		}
+		write_pgm(image_label, image_label + "_gaussian_blur", output_image);
 		for (int i = 1; i < IMAGE_HEIGHT - 1; i++) {
 			for (int j = 1; j < IMAGE_WIDTH - 1; j++) {
 				int V = convolve_order_2(ROBERTS_V, i, j, blurred_image);
@@ -145,7 +151,7 @@ int main(void) {  // Start Total Timer
 					round(sqrt(pow(V, 2) + pow(H, 2))));
 			}
 		}
-		write_pgm(image_label, image_label + "_gaussian_roberts", output_image);
+		write_pgm(image_label, image_label + "_gaussian_roberts", blurred_image);
 		}  // End Gaussian Roberts Timer
 	}
 
