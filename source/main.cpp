@@ -142,7 +142,7 @@ int main(void) {  // Start Total Timer
 				}
 			}
 		}
-		write_pgm(image_label, image_label + "_gaussian_blur", output_image);
+		write_pgm(image_label, image_label + "_gaussian_blur", blurred_image);
 		for (int i = 1; i < IMAGE_HEIGHT - 1; i++) {
 			for (int j = 1; j < IMAGE_WIDTH - 1; j++) {
 				int V = convolve_order_2(ROBERTS_V, i, j, blurred_image);
@@ -151,7 +151,7 @@ int main(void) {  // Start Total Timer
 					round(sqrt(pow(V, 2) + pow(H, 2))));
 			}
 		}
-		write_pgm(image_label, image_label + "_gaussian_roberts", blurred_image);
+		write_pgm(image_label, image_label + "_gaussian_roberts", output_image);
 		}  // End Gaussian Roberts Timer
 	}
 
