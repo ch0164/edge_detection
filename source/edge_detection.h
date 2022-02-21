@@ -1,6 +1,7 @@
 /* 
     File: edge_detection.h
 */
+#pragma once
 
 /* C++ Includes */
 #include <chrono>
@@ -8,6 +9,7 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 #include <utility>
@@ -19,7 +21,8 @@
 #include "convert/pirate.h"
 
 /* Output Directory */
-static const std::string OUTPUT_DIR = "../output/";
+static const std::string ROOT_DIR = "C:\\Users\\Christian\\Desktop\\School\\Research\\edge_detection\\";
+static const std::string OUTPUT_DIR = ROOT_DIR + "output\\";
 
 /* Input Image Info */
 typedef std::pair<std::string, const unsigned char *> Image;

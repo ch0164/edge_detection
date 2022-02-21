@@ -1,5 +1,5 @@
 /*
-	File: main.cpp
+	File: edge_detection.cpp
 */
 #include "edge_detection.h"
 
