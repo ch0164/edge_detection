@@ -4,6 +4,7 @@
 #pragma once
 
 /* C++ Includes */
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <ctime>

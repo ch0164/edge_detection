@@ -1,7 +1,6 @@
 /*
 	File: histogram_equalization.cpp
 */
-#include "edge_detection.h"
 #include "histogram_equalization.h"
 
 int main(void) {
@@ -18,13 +17,24 @@ int main(void) {
 		std::string label = image_pair.first;
 		const unsigned char *image = image_pair.second;
 
-		/* Read flat 1D image array to 2D array. */
+		/* Read flat 1D image array to 2D array. 
+		Also, find min/max intensities in the image for later.*/
+		int i_min = 255, i_max = 0;
 		for (int i = 0; i < IMAGE_HEIGHT; i++) {
 			for (int j = 0; j < IMAGE_WIDTH; j++) {
 				input_image[i][j] = static_cast<int>(
 					image[i * IMAGE_HEIGHT + j]);
+				i_min = input_image[i][j] < i_min ?
+					input_image[i][j] : i_min;
+				i_max = input_image[i][j] > i_max ?
+					input_image[i][j] : i_max;
 			}
 		}
+
+		/* Michelson contrast (or visibility) coefficient:
+		https://en.wikipedia.org/wiki/Contrast_(vision) */
+		double michelson_coefficient = static_cast<double>(
+				(i_max - i_min) / (i_max + i_min));
 
 		/* Run experiments with thresholds from 50-250, incremented by 50. */
 		for (int threshold = 50; threshold <= 250; threshold += 50) {
@@ -56,12 +66,32 @@ int main(void) {
 			}
 			write_pgm(label,
 				"reject_" + std::to_string(threshold), output_image);
-
-			/* Set pixels over threshold to maxmium intensity,
-			but keep pixels under threshold. */
+			
+			/* Take pixels above the threshold in previous thresholding,
+			and rescale them to range from 1 to 255, keeping those below
+			the threshold at minimum intensity. */
 			for (int i = 0; i < IMAGE_HEIGHT; i++) {
 				for (int j = 0; j < IMAGE_WIDTH; j++) {
-					if (input_image[i][j] < threshold) {
+					if (output_image[i][j] < 0 || input_image[i][j] < 0)
+						std::cout << "Error, negative number found";
+					if (output_image[i][j] != 0) {
+						/* Scale down image according to threshold. */
+						double s = (output_image[i][j] - threshold) /
+							(255.0 - threshold) * (255.0 - 1.0);
+						int rescaled_pixel = static_cast<int>(round(s));
+						output_image[i][j] = std::min(255, std::max(rescaled_pixel, 1));
+					}
+				}
+			}
+			write_pgm(label,
+				"reject_rescale_" + std::to_string(threshold), output_image);
+
+
+			/* "Accept" pixels under or at threshold and keep them the same,
+			but change those above the threshold to maximum intensity. */
+			for (int i = 0; i < IMAGE_HEIGHT; i++) {
+				for (int j = 0; j < IMAGE_WIDTH; j++) {
+					if (input_image[i][j] <= threshold) {
 						output_image[i][j] = input_image[i][j];
 					}
 					else {
@@ -70,22 +100,21 @@ int main(void) {
 				}
 			}
 			write_pgm(label, "accept_" + std::to_string(threshold), output_image);
+
+			/* Take pixels below the threshold in previous thresholding,
+			and rescale them to range from 0 to 254, but keep those above
+			the threshold at maximum intensity. */
+			for (int i = 0; i < IMAGE_HEIGHT; i++) {
+				for (int j = 0; j < IMAGE_WIDTH; j++) {
+					if (output_image[i][j] != 255) {
+						double s = (254.0 / threshold) * output_image[i][j];
+						int rescaled_pixel = static_cast<int>(round(s));
+						output_image[i][j] = std::min(254, std::max(rescaled_pixel, 0));
+					}
+				}
+			}
+			write_pgm(label, "accept_rescale_" + std::to_string(threshold), output_image);
 		}
-
-		/* Rescale image with threshold of 150 intensity. */
-		// int threshold = 150;
-		// for (int i = 0; i < IMAGE_HEIGHT; i++) {
-		//         for (int j = 0; j < IMAGE_WIDTH; j++) {
-		//             /* Set any pixels under the threshold to minimum intensity;
-		//             otherwise, set them to maximum intensity. */
-		//             if (input_image[i][j] < threshold) {
-		// 				float scale = input_image[i][j] / threshold;
-
-		//             } else {
-		//                 output_image[i][j] = input_image[i][j];
-		//             }
-		//         }
-		//     }
 
 		/* Build physical image histogram. */
 		std::map<int, int> hist = create_histogram(image);
