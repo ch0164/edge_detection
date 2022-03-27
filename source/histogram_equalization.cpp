@@ -137,14 +137,14 @@ int main(void) {
 		write_pgm(label, "equalized_histogram", output_image);
 
 		/* Create histograms of equalized image for output.*/
-		//std::map<int, int> equalized_hist = create_histogram(output_image);
-		//std::map<int, double> equalized_cumulative_hist =
-		//	create_cumulative_histogram(equalized_hist);
+	// 	std::map<int, int> equalized_hist = create_histogram(output_image);
+	// 	std::map<int, double> equalized_cumulative_hist =
+	// 		create_cumulative_histogram(equalized_hist);
 
-		/* Output all histograms as CSV files for visualization. */
-		//write_histograms(label, "original", hist, cumulative_hist);
-		//write_histograms(label, "equalized", 
-		//	equalized_hist, equalized_cumulative_hist);
+	// 	/* Output all histograms as CSV files for visualization. */
+	// 	write_histograms(label, "original", hist, cumulative_hist);
+	// 	write_histograms(label, "equalized", 
+	// 		equalized_hist, equalized_cumulative_hist);
 	}
 
 
