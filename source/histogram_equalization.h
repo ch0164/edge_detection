@@ -14,21 +14,26 @@
 
 /* Project Includes */
 #include "convert/cameraman.h"
+#include "convert/house.h"
 #include "convert/lena.h"
 #include "convert/mandril.h"
+#include "convert/peppers.h"
 #include "convert/pirate.h"
 
 /* Output Directory */
 static const std::string ROOT_DIR = "C:\\Users\\Christian\\Desktop\\School\\Research\\edge_detection\\";
+//static const std::string ROOT_DIR = "C:\\Users\\youar\\CLionProjects\\edge_detection";
 static const std::string OUTPUT_DIR = ROOT_DIR + "output\\";
 
 /* Input Image Info */
 typedef std::pair<std::string, const unsigned char *> Image;
 static const std::vector<Image> IMAGES = {
-	Image("cameraman", cameraman_image),
-	Image("lena", lena_image),
-	Image("mandril", mandril_image),
-	Image("pirate", pirate_image)
+    Image("cameraman", cameraman_image),
+    Image("house", house_image),
+    Image("lena", lena_image),
+    Image("mandril", mandril_image),
+    Image("peppers", peppers_image),
+    Image("pirate", pirate_image)
 };
 
 /* Input Image Dimensions */
